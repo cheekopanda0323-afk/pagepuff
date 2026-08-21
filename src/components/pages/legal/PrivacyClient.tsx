@@ -18,7 +18,7 @@ export default function PrivacyClient() {
         <LegalHeader
           title="Privacy Policy"
           description="Your privacy matters to us. Learn how PagePuff protects your data and respects your rights."
-          lastUpdated="December 22, 2024"
+          lastUpdated="August 2026"
           icon={Shield}
         />
 

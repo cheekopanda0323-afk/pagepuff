@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package",
-  "name": "simply-pdf",
+  "name": "pagepuff",
   "version": "3.0.0",
   "private": true,
   "scripts": {

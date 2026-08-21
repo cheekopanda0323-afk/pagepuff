@@ -19,7 +19,7 @@ export default function TermsClient() {
         <LegalHeader
           title="Terms of Service"
           description="Please read these terms carefully before using PagePuff."
-          lastUpdated="December 22, 2024"
+          lastUpdated="August 2026"
           icon={Scale}
         />
 
