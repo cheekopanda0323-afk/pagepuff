@@ -85,7 +85,7 @@ export const metadata: Metadata = {
   },
   other: {
     "google-adsense-account":
-      process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID || "ca-pub-4266443141083729",
+      process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID || "ca-YOUR_ADSENSE_ID_HERE",
   },
 };
 
@@ -124,7 +124,7 @@ export default function RootLayout({
         <Script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${
-            process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID || "ca-pub-4266443141083729"
+            process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID || "ca-YOUR_ADSENSE_ID_HERE"
           }`}
           crossOrigin="anonymous"
           strategy="afterInteractive"

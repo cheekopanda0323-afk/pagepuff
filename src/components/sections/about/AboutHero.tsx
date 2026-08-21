@@ -23,7 +23,7 @@ export const AboutHero = () => {
           {/* Main photo container */}
           <div className="relative overflow-hidden rounded-4xl border-4 border-white shadow-2xl">
             <Image
-              src="/arsh-verma.jpg"
+              src="/hassan-amjad.jpg"
               alt="Hassan Amjad"
               width={500}
               height={500}
