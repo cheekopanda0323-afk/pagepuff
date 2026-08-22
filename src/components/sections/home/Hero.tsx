@@ -45,7 +45,7 @@ export const Hero = () => {
         transition={{ delay: 0.7, duration: 0.8 }}
         className="absolute top-48 right-[12%] hidden lg:block"
       >
-        <div className="animate-float-slow flex h-20 w-20 items-center justify-center rounded-2xl bg-black text-white shadow-xl">
+        <div className="animate-float-slow bg-primary flex h-20 w-20 items-center justify-center rounded-2xl text-white shadow-xl">
           <Merge className="h-10 w-10" />
         </div>
       </motion.div>
