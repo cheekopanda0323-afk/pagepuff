@@ -1,122 +1,443 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useState } from "react";
-import { 
-  FileText, 
-  Layers, 
-  Scissors, 
-  Minimize, 
-  RefreshCw, 
-  Edit3, 
-  Lock, 
-  Cpu, 
-  ChevronDown, 
-  Menu, 
-  X 
+import { motion, AnimatePresence } from "framer-motion";
+import SignInModal from "@/components/auth/SignInModal";
+import Image from "next/image";
+import { useAuth } from "@/context/AuthProvider";
+import {
+  Merge,
+  Split,
+  Minimize2,
+  RotateCw,
+  FileImage,
+  Lock,
+  Unlock,
+  Layers,
+  Stamp,
+  FileSignature,
+  Type,
+  ScanLine,
+  FileText,
+  FileUp,
+  FileDown,
+  ChevronDown,
+  History,
+  LogOut,
+  User,
+  Wrench,
+  LogIn,
+  PlusCircle,
+  Globe,
+  BookOpen,
+  ImagePlus,
+  Table as TableIcon,
+  Presentation,
+  Scissors,
+  Trash2,
+  GripVertical,
+  Copy,
 } from "lucide-react";
 
+const tools = [
+  { title: "Merge", icon: Merge, href: "/merge-pdf" },
+  { title: "Split", icon: Split, href: "/split-pdf" },
+  { title: "Compress", icon: Minimize2, href: "/compress-pdf" },
+  { title: "Extract", icon: Scissors, href: "/extract-pages" },
+  { title: "Delete", icon: Trash2, href: "/delete-pages" },
+  { title: "Reorder", icon: GripVertical, href: "/reorder-pages" },
+  { title: "Rotate", icon: RotateCw, href: "/rotate-pdf" },
+  { title: "Duplicate", icon: Copy, href: "/duplicate-pages" },
+  { title: "Insert", icon: PlusCircle, href: "/insert-pages" },
+  { title: "JPG to PDF", icon: ImagePlus, href: "/jpg-to-pdf" },
+  { title: "PDF to JPG", icon: FileImage, href: "/pdf-to-jpg" },
+  { title: "Word to PDF", icon: FileUp, href: "/word-to-pdf" },
+  { title: "PDF to Word", icon: FileText, href: "/pdf-to-word" },
+  { title: "Excel to PDF", icon: TableIcon, href: "/excel-to-pdf" },
+  { title: "PDF to Excel", icon: FileDown, href: "/pdf-to-excel" },
+  { title: "PPT to PDF", icon: Presentation, href: "/powerpoint-to-pdf" },
+  { title: "PDF to PPT", icon: Presentation, href: "/pdf-to-powerpoint" },
+  { title: "Web to PDF", icon: Globe, href: "/html-to-pdf" },
+  { title: "PDF to HTML", icon: Globe, href: "/pdf-to-html" },
+  { title: "Text to PDF", icon: FileText, href: "/text-to-pdf" },
+  { title: "PDF to Text", icon: FileText, href: "/pdf-to-text" },
+  { title: "EPUB to PDF", icon: BookOpen, href: "/epub-to-pdf" },
+  { title: "PDF to EPUB", icon: BookOpen, href: "/pdf-to-epub" },
+  { title: "Unlock", icon: Unlock, href: "/unlock-pdf" },
+  { title: "Protect", icon: Lock, href: "/protect-pdf" },
+  { title: "Organize", icon: Layers, href: "/organize-pdf" },
+  { title: "Watermark", icon: Stamp, href: "/watermark-pdf" },
+  { title: "Sign", icon: FileSignature, href: "/sign-pdf" },
+  { title: "Edit", icon: Type, href: "/edit-pdf" },
+  { title: "OCR", icon: ScanLine, href: "/ocr-pdf" },
+  { title: "Repair", icon: Wrench, href: "/repair-pdf" },
+  { title: "Metadata", icon: FileText, href: "/edit-metadata" },
+];
+
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [showTools, setShowTools] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const { user, logout, isLoading } = useAuth();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowUserMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 h-16 border-b border-white/10 bg-white/80 backdrop-blur-xl dark:bg-black/80">
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2" title="PagePuff">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500 font-bold text-white shadow-lg shadow-orange-500/30">
-            PP
+    <header
+      className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
+        isScrolled
+          ? "border-b border-gray-100 bg-white/80 shadow-sm backdrop-blur-xl"
+          : "bg-transparent"
+      }`}
+    >
+      <nav className="container mx-auto px-4">
+        <div className="flex h-20 items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="group flex items-center gap-2">
+            <div className="relative h-10 w-10 transition-transform group-hover:scale-110 group-hover:rotate-3">
+              <Image
+                src="/logo.png"
+                alt="PagePuff Logo"
+                fill
+                className="rounded-xl object-contain"
+                priority
+              />
+            </div>
+            <span className="text-xl font-bold tracking-tight">
+              Page<span className="text-primary">Puff</span>
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden items-center gap-8 lg:flex">
+            {/* Tools Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setShowTools(true)}
+              onMouseLeave={() => setShowTools(false)}
+            >
+              <button className="underline-hover hover:text-primary flex items-center gap-1 py-2 font-medium text-gray-700 transition-colors">
+                All Tools
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform ${showTools ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              <AnimatePresence>
+                {showTools && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-1/2 -translate-x-1/2 pt-4"
+                  >
+                    <div className="grid w-[640px] grid-cols-3 gap-2 rounded-2xl border border-gray-100 bg-white p-4 shadow-2xl">
+                      {tools.map((tool) => (
+                        <Link
+                          key={tool.href}
+                          href={tool.href}
+                          className="group flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-gray-50"
+                        >
+                          <div className="group-hover:bg-primary flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 transition-all group-hover:text-white">
+                            <tool.icon className="h-5 w-5" />
+                          </div>
+                          <span className="group-hover:text-primary text-sm font-medium transition-colors">
+                            {tool.title}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <Link
+              href="/merge-pdf"
+              className="underline-hover hover:text-primary font-medium text-gray-700 transition-colors"
+            >
+              Merge
+            </Link>
+            <Link
+              href="/split-pdf"
+              className="underline-hover hover:text-primary font-medium text-gray-700 transition-colors"
+            >
+              Split
+            </Link>
+            <Link
+              href="/compress-pdf"
+              className="underline-hover hover:text-primary font-medium text-gray-700 transition-colors"
+            >
+              Compress
+            </Link>
+            <Link
+              href="/about"
+              className="underline-hover hover:text-primary font-medium text-gray-700 transition-colors"
+            >
+              About
+            </Link>
           </div>
-          <span className="text-xl font-bold tracking-tight">PagePuff</span>
-        </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          
-          {/* All Tools Dropdown */}
-          <div 
-            className="relative"
-            onMouseEnter={() => setToolsDropdownOpen(true)}
-            onMouseLeave={() => setToolsDropdownOpen(false)}
-          >
-            <button className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white">
-              All PDF tools
-              <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${toolsDropdownOpen ? "rotate-180" : ""}`} />
-            </button>
+          {/* Auth Section */}
+          <div className="hidden items-center gap-4 lg:flex">
+            {/* Show skeleton while checking auth status */}
+            {isLoading ? (
+              <div className="h-9 w-9 animate-pulse rounded-full bg-gray-100" />
+            ) : user ? (
+              // Logged in - User dropdown
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-gray-100"
+                >
+                  {user.picture ? (
+                    <div className="relative h-9 w-9">
+                      <Image
+                        src={user.picture}
+                        alt={user.name}
+                        fill
+                        className="rounded-full border-2 border-gray-200 object-cover"
+                        unoptimized
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
+                      <User className="h-5 w-5 text-gray-500" />
+                    </div>
+                  )}
+                  <div className="hidden text-left xl:block">
+                    <p className="line-clamp-1 text-sm font-medium text-gray-900">
+                      {user.name}
+                    </p>
+                    <p className="line-clamp-1 text-xs text-gray-500">
+                      {user.email}
+                    </p>
+                  </div>
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${showUserMenu ? "rotate-180" : ""}`}
+                  />
+                </button>
 
-            {/* Mega Menu Dropdown */}
-            {toolsDropdownOpen && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[700px] animate-in fade-in slide-in-from-top-2 duration-200">
-                <div className="grid grid-cols-3 gap-6 rounded-3xl border border-gray-100 bg-white/95 p-6 shadow-2xl backdrop-blur-2xl dark:border-gray-800 dark:bg-black/95">
-                  <div>
-                    <div className="mb-3 text-xs font-semibold tracking-wider text-gray-400 uppercase">Organize PDF</div>
-                    <ul className="space-y-2">
-                      <li><Link href="/merge-pdf" className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-300"><Layers className="h-4 w-4 text-orange-500" /> Merge PDF</Link></li>
-                      <li><Link href="/split-pdf" className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-300"><Scissors className="h-4 w-4 text-orange-500" /> Split PDF</Link></li>
-                      <li><Link href="/organize-pdf" className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-300"><FileText className="h-4 w-4 text-orange-500" /> Organize PDF</Link></li>
-                    </ul>
-                  </div>
-                  <div>
-                    <div className="mb-3 text-xs font-semibold tracking-wider text-gray-400 uppercase">Optimize PDF</div>
-                    <ul className="space-y-2">
-                      <li><Link href="/compress-pdf" className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-500 dark:text-gray-300"><Minimize className="h-4 w-4 text-green-500" /> Compress PDF</Link></li>
-                      <li><Link href="/repair-pdf" className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-500 dark:text-gray-300"><RefreshCw className="h-4 w-4 text-green-500" /> Repair PDF</Link></li>
-                    </ul>
-                  </div>
-                  <div>
-                    <div className="mb-3 text-xs font-semibold tracking-wider text-gray-400 uppercase">Convert & Edit</div>
-                    <ul className="space-y-2">
-                      <li><Link href="/word-to-pdf" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-500 dark:text-gray-300"><FileText className="h-4 w-4 text-blue-500" /> Word to PDF</Link></li>
-                      <li><Link href="/edit-pdf" className="flex items-center gap-2 text-sm text-gray-600 hover:text-purple-500 dark:text-gray-300"><Edit3 className="h-4 w-4 text-purple-500" /> Edit PDF</Link></li>
-                      <li><Link href="/protect-pdf" className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-500 dark:text-gray-300"><Lock className="h-4 w-4 text-red-500" /> Protect PDF</Link></li>
-                    </ul>
-                  </div>
-                </div>
+                <AnimatePresence>
+                  {showUserMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full right-0 mt-2 w-56 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                    >
+                      <div className="border-b border-gray-100 p-3">
+                        <p className="text-sm font-medium text-gray-900">
+                          {user.name}
+                        </p>
+                        <p className="truncate text-xs text-gray-500">
+                          {user.email}
+                        </p>
+                      </div>
+                      <div className="p-1">
+                        <Link
+                          href="/history"
+                          onClick={() => setShowUserMenu(false)}
+                          className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gray-50"
+                        >
+                          <History className="h-4 w-4 text-gray-500" />
+                          <span className="text-sm">My History</span>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            logout();
+                            setShowUserMenu(false);
+                          }}
+                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-red-600 transition-colors hover:bg-red-50"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          <span className="text-sm">Sign Out</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
+            ) : (
+              // Not logged in - Google Sign In button
+              <button
+                onClick={() => setShowSignInModal(true)}
+                className="bg-primary hover:bg-primary-hover group flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:scale-105 active:scale-95"
+              >
+                <LogIn className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                Sign In
+              </button>
             )}
           </div>
 
-          <Link href="/features" className="text-sm font-medium text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white">Features</Link>
-          <Link href="/pricing" className="text-sm font-medium text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white">Pricing</Link>
-        </nav>
-
-        {/* Actions (Login / Signup with Glassmorphism) */}
-        <div className="hidden md:flex items-center gap-3">
-          <Link href="/login" className="rounded-xl px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
-            Login
-          </Link>
-          <Link href="/register" className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-orange-500/25 transition-all hover:bg-orange-600">
-            Sign up
-          </Link>
-        </div>
-
-        {/* Mobile menu button */}
-        <button 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden rounded-xl p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-        >
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </div>
-
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full border-b border-gray-100 bg-white/95 p-6 shadow-xl backdrop-blur-2xl md:hidden dark:border-gray-800 dark:bg-black/95">
-          <div className="flex flex-col gap-4">
-            <Link href="/merge-pdf" onClick={() => setMobileMenuOpen(false)} className="text-base font-medium">Merge PDF</Link>
-            <Link href="/split-pdf" onClick={() => setMobileMenuOpen(false)} className="text-base font-medium">Split PDF</Link>
-            <Link href="/compress-pdf" onClick={() => setMobileMenuOpen(false)} className="text-base font-medium">Compress PDF</Link>
-            <Link href="/edit-pdf" onClick={() => setMobileMenuOpen(false)} className="text-base font-medium">Edit PDF</Link>
-            <div className="my-2 h-px bg-gray-100 dark:bg-gray-800" />
-            <div className="flex gap-3">
-              <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="flex-1 rounded-xl border border-gray-200 py-2.5 text-center text-sm font-medium dark:border-gray-700">Login</Link>
-              <Link href="/register" onClick={() => setMobileMenuOpen(false)} className="flex-1 rounded-xl bg-orange-500 py-2.5 text-center text-sm font-medium text-white shadow-md">Sign up</Link>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="rounded-xl p-2 transition-colors hover:bg-gray-100 lg:hidden"
+          >
+            <div className="relative h-6 w-6">
+              <span
+                className={`absolute left-0 h-0.5 w-6 bg-black transition-all duration-300 ${
+                  isMenuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-1"
+                }`}
+              />
+              <span
+                className={`absolute top-1/2 left-0 h-0.5 w-6 -translate-y-1/2 bg-black transition-all duration-300 ${
+                  isMenuOpen ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <span
+                className={`absolute left-0 h-0.5 w-6 bg-black transition-all duration-300 ${
+                  isMenuOpen
+                    ? "top-1/2 -translate-y-1/2 -rotate-45"
+                    : "bottom-1"
+                }`}
+              />
             </div>
-          </div>
+          </button>
         </div>
-      )}
+      </nav>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-gray-100 bg-white lg:hidden"
+          >
+            <div className="container mx-auto px-4 py-6">
+              {/* Mobile Auth Section */}
+              <div className="mb-6 border-b border-gray-100 pb-6">
+                {user ? (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {user.picture ? (
+                        <div className="relative h-10 w-10">
+                          <Image
+                            src={user.picture}
+                            alt={user.name}
+                            fill
+                            className="rounded-full border-2 border-gray-200 object-cover"
+                            unoptimized
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
+                          <User className="h-5 w-5 text-gray-500" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm font-medium">{user.name}</p>
+                        <p className="text-xs text-gray-500">{user.email}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsMenuOpen(false);
+                      }}
+                      className="rounded-lg p-2 text-red-600 transition-colors hover:bg-red-50"
+                    >
+                      <LogOut className="h-5 w-5" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setShowSignInModal(true);
+                    }}
+                    className="bg-primary hover:bg-primary-hover flex w-full items-center justify-center gap-2 rounded-xl py-3 font-medium text-white shadow-sm transition-colors"
+                  >
+                    <LogIn className="h-5 w-5" />
+                    Sign In with Google
+                  </button>
+                )}
+              </div>
+
+              {/* Mobile History Link */}
+              {user && (
+                <Link
+                  href="/history"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="mb-4 flex items-center gap-3 rounded-xl bg-gray-50 p-3 transition-colors hover:bg-gray-100"
+                >
+                  <History className="h-5 w-5 text-gray-500" />
+                  <span className="text-sm font-medium">My History</span>
+                </Link>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                {tools.map((tool) => (
+                  <Link
+                    key={tool.href}
+                    href={tool.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-3 rounded-xl bg-gray-50 p-3 transition-colors hover:bg-gray-100"
+                  >
+                    <tool.icon className="h-5 w-5" />
+                    <span className="text-sm font-medium">{tool.title}</span>
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-6">
+                <Link
+                  href="/merge-pdf"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="btn-primary w-full justify-center"
+                >
+                  Get Started
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <SignInModal
+        isOpen={showSignInModal}
+        onClose={() => setShowSignInModal(false)}
+      />
     </header>
   );
 }
