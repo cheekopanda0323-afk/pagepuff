@@ -66,7 +66,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={onClose}
-            className="fixed inset-0 z-9999 cursor-pointer bg-black/80 backdrop-blur-md transition-opacity"
+            className="fixed inset-0 z-9999 cursor-pointer bg-slate-950/65 backdrop-blur-xl transition-opacity"
           />
 
           {/* Modal */}
@@ -78,16 +78,16 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
             className="pointer-events-none fixed top-1/2 left-1/2 z-10000 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 px-4"
           >
             {/* Glassmorphism Card */}
-            <div className="pointer-events-auto overflow-hidden rounded-3xl border border-white/40 bg-white/90 shadow-2xl ring-1 ring-black/5 backdrop-blur-xl">
+            <div className="pointer-events-auto overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-2xl shadow-slate-400/20 ring-1 ring-white/50 backdrop-blur-2xl dark:border-slate-700 dark:bg-slate-900/75 dark:ring-slate-700/70">
               {/* Hero Header */}
-              <div className="relative border-b border-gray-100 bg-linear-to-b from-gray-50 to-white p-8 text-center">
+              <div className="relative border-b border-white/70 bg-linear-to-b from-white/80 to-slate-50/80 p-8 text-center dark:border-slate-700 dark:from-slate-900/50 dark:to-slate-800/40">
                 <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl" />
                 <div className="absolute bottom-0 left-0 h-32 w-32 rounded-full bg-purple-500/10 blur-3xl" />
 
                 <div className="absolute top-4 right-4">
                   <button
                     onClick={onClose}
-                    className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                    className="rounded-full p-2 text-gray-400 transition-colors hover:bg-white/80 hover:text-gray-700"
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -97,15 +97,15 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: "spring" }}
-                  className="relative mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-black text-white shadow-lg shadow-black/20"
+                  className="relative mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-blue-500 to-violet-500 text-white shadow-lg shadow-blue-500/30"
                 >
                   <LogIn className="h-8 w-8" />
                 </motion.div>
 
-                <h2 className="mb-2 text-2xl font-bold text-gray-900">
+                <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
                   Welcome Back
                 </h2>
-                <p className="text-gray-500">
+                <p className="text-gray-500 dark:text-slate-300">
                   Sign in to access your dashboard
                 </p>
               </div>
@@ -113,14 +113,14 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
               {/* Content */}
               <div className="p-8">
                 <div className="mb-8 flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100/80 text-emerald-600">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                   <div className="text-left">
-                    <h3 className="text-sm font-semibold text-gray-900">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
                       Secure & Private
                     </h3>
-                    <p className="mt-1 text-sm text-gray-500">
+                    <p className="mt-1 text-sm text-gray-500 dark:text-slate-300">
                       Your files are processed locally. Sync your preferences
                       and history securely.
                     </p>
