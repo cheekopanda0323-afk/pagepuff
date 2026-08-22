@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Providers } from "@/components/auth/Providers";
 import { CookieConsent } from "@/components/ui/CookieConsent";
@@ -129,6 +130,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         <Providers>
+          <Header />
           <WelcomeAuthModal />
           <CookieConsent />
           <main className="grow">{children}</main>
