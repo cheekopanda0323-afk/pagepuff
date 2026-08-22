@@ -41,8 +41,8 @@ export function CookieConsent() {
             exit={{ opacity: 0, y: 100, scale: 0.9 }}
             className="pointer-events-auto container mx-auto max-w-4xl"
           >
-            <div className="flex flex-col items-center gap-6 rounded-[32px] border border-white/20 bg-white/80 p-6 shadow-2xl backdrop-blur-2xl md:flex-row md:gap-8 md:p-8">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-black text-white shadow-lg shadow-black/10">
+            <div className="flex flex-col items-center gap-6 rounded-[32px] border border-white/50 bg-white/80 p-6 shadow-2xl shadow-slate-300/30 backdrop-blur-2xl md:flex-row md:gap-8 md:p-8">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20">
                 <Cookie className="h-8 w-8" />
               </div>
 
@@ -60,20 +60,20 @@ export function CookieConsent() {
               <div className="flex w-full shrink-0 flex-col items-center gap-3 sm:flex-row md:w-auto">
                 <Link
                   href="/cookie-policy"
-                  className="group flex items-center gap-2 px-4 py-2 text-sm font-bold text-gray-400 transition-colors hover:text-black"
+                  className="group flex items-center gap-2 px-4 py-2 text-sm font-bold text-gray-500 transition-colors hover:text-black"
                 >
                   <Info className="h-4 w-4 transition-transform group-hover:rotate-12" />
                   Learn More
                 </Link>
                 <button
                   onClick={handleDecline}
-                  className="w-full rounded-2xl bg-gray-100 px-8 py-3 text-sm font-bold text-gray-600 transition-all hover:bg-gray-200 sm:w-auto"
+                  className="w-full rounded-2xl border border-white/70 bg-white/80 px-8 py-3 text-sm font-bold text-gray-600 backdrop-blur-xl transition-all hover:bg-white sm:w-auto"
                 >
                   Decline
                 </button>
                 <button
                   onClick={handleAccept}
-                  className="w-full rounded-2xl bg-black px-10 py-3 text-sm font-bold text-white shadow-xl shadow-black/10 transition-all hover:scale-105 active:scale-95 sm:w-auto"
+                  className="w-full rounded-2xl bg-linear-to-r from-sky-600 to-violet-600 px-10 py-3 text-sm font-bold text-white shadow-xl shadow-sky-500/25 transition-all hover:scale-105 active:scale-95 sm:w-auto"
                 >
                   Accept All
                 </button>

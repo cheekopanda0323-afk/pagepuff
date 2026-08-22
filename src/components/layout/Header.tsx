@@ -122,8 +122,8 @@ export default function Header() {
     <header
       className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "border-b border-gray-100 bg-white/80 shadow-sm backdrop-blur-xl"
-          : "bg-transparent"
+          ? "border-b border-white/40 bg-white/75 shadow-xl shadow-slate-200/40 backdrop-blur-2xl"
+          : "bg-white/20 backdrop-blur-md"
       }`}
     >
       <nav className="container mx-auto px-4">
@@ -152,7 +152,7 @@ export default function Header() {
               onMouseEnter={() => setShowTools(true)}
               onMouseLeave={() => setShowTools(false)}
             >
-              <button className="underline-hover flex items-center gap-1 py-2 font-medium text-gray-700 transition-colors hover:text-black">
+              <button className="flex items-center gap-1 rounded-full border border-white/50 bg-white/70 px-4 py-2 text-sm font-semibold text-gray-700 backdrop-blur-xl transition-colors hover:text-black">
                 All Tools
                 <ChevronDown
                   className={`h-4 w-4 transition-transform ${showTools ? "rotate-180" : ""}`}
@@ -168,14 +168,26 @@ export default function Header() {
                     transition={{ duration: 0.2 }}
                     className="absolute top-full left-1/2 -translate-x-1/2 pt-4"
                   >
-                    <div className="grid w-[640px] grid-cols-3 gap-2 rounded-2xl border border-gray-100 bg-white p-4 shadow-2xl">
-                      {tools.map((tool) => (
+                    <div className="grid w-[640px] grid-cols-3 gap-2 rounded-2xl border border-white/60 bg-white/85 p-4 shadow-2xl shadow-slate-300/30 backdrop-blur-2xl">
+                      {tools.map((tool, index) => (
                         <Link
                           key={tool.href}
                           href={tool.href}
-                          className="group flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-gray-50"
+                          className="group flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-white"
                         >
-                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 transition-all group-hover:bg-black group-hover:text-white">
+                          <div
+                            className={`flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br text-white transition-all ${
+                              index % 5 === 0
+                                ? "from-rose-500 to-orange-500"
+                                : index % 5 === 1
+                                  ? "from-blue-500 to-cyan-500"
+                                  : index % 5 === 2
+                                    ? "from-emerald-500 to-lime-500"
+                                    : index % 5 === 3
+                                      ? "from-violet-500 to-fuchsia-500"
+                                      : "from-amber-500 to-yellow-500"
+                            }`}
+                          >
                             <tool.icon className="h-5 w-5" />
                           </div>
                           <span className="text-sm font-medium">
@@ -225,7 +237,7 @@ export default function Header() {
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-gray-100"
+                  className="flex items-center gap-3 rounded-xl border border-transparent bg-white/70 p-2 backdrop-blur-xl transition-colors hover:border-white/60 hover:bg-white/90"
                 >
                   {user.picture ? (
                     <div className="relative h-9 w-9">
@@ -262,7 +274,7 @@ export default function Header() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full right-0 mt-2 w-56 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl"
+                      className="absolute top-full right-0 mt-2 w-56 overflow-hidden rounded-xl border border-white/70 bg-white/85 shadow-xl shadow-slate-200/50 backdrop-blur-2xl"
                     >
                       <div className="border-b border-gray-100 p-3">
                         <p className="text-sm font-medium text-gray-900">
@@ -311,7 +323,7 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="rounded-xl p-2 transition-colors hover:bg-gray-100 lg:hidden"
+            className="rounded-xl border border-white/50 bg-white/70 p-2 backdrop-blur-xl transition-colors hover:bg-white lg:hidden"
           >
             <div className="relative h-6 w-6">
               <span
@@ -344,11 +356,11 @@ export default function Header() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-gray-100 bg-white lg:hidden"
+            className="max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-white/50 bg-white/80 backdrop-blur-2xl lg:hidden"
           >
             <div className="container mx-auto px-4 py-6">
               {/* Mobile Auth Section */}
-              <div className="mb-6 border-b border-gray-100 pb-6">
+              <div className="mb-6 border-b border-white/60 pb-6">
                 {user ? (
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -388,7 +400,7 @@ export default function Header() {
                       setIsMenuOpen(false);
                       setShowSignInModal(true);
                     }}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-black py-3 font-medium text-white shadow-sm transition-colors hover:bg-gray-800"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-gray-900 to-gray-700 py-3 font-medium text-white shadow-sm transition-colors hover:from-black hover:to-gray-800"
                   >
                     <LogIn className="h-5 w-5" />
                     Sign In with Google
@@ -401,7 +413,7 @@ export default function Header() {
                 <Link
                   href="/history"
                   onClick={() => setIsMenuOpen(false)}
-                  className="mb-4 flex items-center gap-3 rounded-xl bg-gray-50 p-3 transition-colors hover:bg-gray-100"
+                  className="mb-4 flex items-center gap-3 rounded-xl border border-white/60 bg-white/70 p-3 backdrop-blur-xl transition-colors hover:bg-white"
                 >
                   <History className="h-5 w-5 text-gray-500" />
                   <span className="text-sm font-medium">My History</span>
@@ -414,7 +426,7 @@ export default function Header() {
                     key={tool.href}
                     href={tool.href}
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl bg-gray-50 p-3 transition-colors hover:bg-gray-100"
+                    className="flex items-center gap-3 rounded-xl border border-white/60 bg-white/70 p-3 backdrop-blur-xl transition-colors hover:bg-white"
                   >
                     <tool.icon className="h-5 w-5" />
                     <span className="text-sm font-medium">{tool.title}</span>
