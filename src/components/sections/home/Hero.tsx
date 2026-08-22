@@ -3,7 +3,7 @@ import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 
 export const Hero = () => {
   return (
-    <section className="relative overflow-hidden border-b border-slate-200/70 bg-[#FAFBFF] px-4 pb-9 pt-7 sm:pb-12 sm:pt-10 md:pb-14 md:pt-12">
+    <section className="relative overflow-hidden border-b border-slate-200/70 bg-[#FAFBFF] px-4 pt-28 pb-9 sm:pt-32 sm:pb-12 md:pt-36 md:pb-14">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(79,70,229,0.08),transparent_42%)]" />
       <div className="pointer-events-none absolute inset-0 grid-pattern opacity-40" />
 
