@@ -17,8 +17,8 @@
   --color-gray-950: #0a0a0a;
 
   /* Semantic */
-  --color-primary: #5B5BD6;
-  --color-primary-hover: #4C4CBD;
+  --color-primary: #e5322d;
+  --color-primary-hover: #c42a25;
   --color-background: #FAFBFF;
   --color-foreground: #111827;
   --color-muted: #F3F4FA;
@@ -591,7 +591,7 @@ body {
 
 /* Focus states */
 *:focus-visible {
-  outline: 2px solid #5B5BD6;
+  outline: 2px solid var(--color-primary);
   outline-offset: 4px;
 }
 
