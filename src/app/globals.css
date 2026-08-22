@@ -17,8 +17,8 @@
   --color-gray-950: #0a0a0a;
 
   /* Semantic */
-  --color-primary: #000000;
-  --color-primary-hover: #262626;
+  --color-primary: #e5322d;
+  --color-primary-hover: #c42a25;
   --color-background: #ffffff;
   --color-foreground: #000000;
   --color-muted: #f5f5f5;
@@ -59,7 +59,7 @@ body {
 
 /* Selection */
 ::selection {
-  background-color: #000;
+  background-color: var(--color-primary);
   color: #fff;
 }
 
@@ -73,12 +73,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #000;
+  background: var(--color-primary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333;
+  background: var(--color-primary-hover);
 }
 
 /* ======================== */
@@ -88,7 +88,7 @@ body {
 @layer components {
   /* Buttons */
   .btn-primary {
-    @apply relative overflow-hidden rounded-full bg-black px-8 py-3 font-semibold text-white transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-black/30 active:scale-95;
+    @apply bg-primary hover:shadow-primary/30 relative overflow-hidden rounded-full px-8 py-3 font-semibold text-white transition-all duration-500 hover:scale-105 hover:shadow-2xl active:scale-95;
   }
 
   .btn-primary::before {
@@ -110,11 +110,11 @@ body {
   }
 
   .btn-secondary {
-    @apply rounded-full border-2 border-black bg-white px-8 py-3 font-semibold text-black transition-all duration-500 hover:scale-105 hover:bg-black hover:text-white active:scale-95;
+    @apply border-primary text-primary hover:bg-primary rounded-full border-2 bg-white px-8 py-3 font-semibold transition-all duration-500 hover:scale-105 hover:text-white active:scale-95;
   }
 
   .btn-outline {
-    @apply rounded-full border-2 border-gray-300 px-8 py-3 font-semibold text-gray-900 transition-all duration-500 hover:border-black hover:bg-black hover:text-white;
+    @apply hover:border-primary hover:bg-primary rounded-full border-2 border-gray-300 px-8 py-3 font-semibold text-gray-900 transition-all duration-500 hover:text-white;
   }
 
   /* Cards */
@@ -168,7 +168,7 @@ body {
   }
 
   .tool-card:hover .tool-icon {
-    @apply scale-110 rotate-6 bg-black text-white;
+    @apply bg-primary scale-110 rotate-6 text-white;
   }
 
   /* Section Headers */
@@ -596,7 +596,7 @@ body {
   left: 0;
   width: 60px;
   height: 3px;
-  background: #000;
+  background: var(--color-primary);
   border-radius: 2px;
 }
 
@@ -656,9 +656,9 @@ body {
 }
 
 .drop-zone.active {
-  @apply border-black bg-gray-50;
+  @apply border-primary bg-gray-50;
   transform: scale(1.02);
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 30px rgba(229, 50, 45, 0.15);
 }
 
 /* File item card */
@@ -789,8 +789,8 @@ body {
 }
 
 .icon-container:hover {
-  @apply bg-black text-white;
-  @apply shadow-xl shadow-black/20;
+  @apply bg-primary text-white;
+  @apply shadow-primary/20 shadow-xl;
   transform: scale(1.1) rotate(5deg);
 }
 
