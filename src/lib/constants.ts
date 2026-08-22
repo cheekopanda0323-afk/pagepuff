@@ -30,204 +30,65 @@ import {
   Presentation,
 } from "lucide-react";
 
+// Glass-style icon tints per category (kept soft/translucent, not flat blocks)
+const glass = {
+  organize: "border-orange-200/70 bg-orange-50/80 text-orange-600",
+  optimize: "border-emerald-200/70 bg-emerald-50/80 text-emerald-600",
+  convert: "border-blue-200/70 bg-blue-50/80 text-blue-600",
+  edit: "border-purple-200/70 bg-purple-50/80 text-purple-600",
+  security: "border-primary/25 bg-primary/10 text-primary",
+  intelligence: "border-teal-200/70 bg-teal-50/80 text-teal-600",
+};
+
+export const toolCategories = [
+  { id: "all", label: "All" },
+  { id: "organize", label: "Organize PDF" },
+  { id: "optimize", label: "Optimize PDF" },
+  { id: "convert", label: "Convert PDF" },
+  { id: "edit", label: "Edit PDF" },
+  { id: "security", label: "PDF Security" },
+  { id: "intelligence", label: "PDF Intelligence" },
+];
+
+// Order follows iLovePDF's tool grid first (for a familiar layout), then
+// any PagePuff-only tools that don't have an iLovePDF equivalent are
+// appended at the end.
 export const tools = [
-  {
-    title: "Merge PDF",
-    description: "Combine multiple PDFs into one",
-    icon: Merge,
-    href: "/merge-pdf",
-    featured: true,
-  },
-  {
-    title: "Split PDF",
-    description: "Separate pages into files",
-    icon: Split,
-    href: "/split-pdf",
-    featured: true,
-  },
-  {
-    title: "Compress PDF",
-    description: "Reduce file size instantly",
-    icon: Minimize2,
-    href: "/compress-pdf",
-    featured: true,
-  },
-  {
-    title: "Extract Pages",
-    description: "Extract specific pages from PDF",
-    icon: Scissors,
-    href: "/extract-pages",
-  },
-  {
-    title: "Delete Pages",
-    description: "Remove unwanted pages from PDF",
-    icon: Trash2,
-    href: "/delete-pages",
-  },
-  {
-    title: "Reorder Pages",
-    description: "Change page order of PDF",
-    icon: GripVertical,
-    href: "/reorder-pages",
-  },
-  {
-    title: "Rotate PDF",
-    description: "Rotate pages any direction",
-    icon: RotateCw,
-    href: "/rotate-pdf",
-  },
-  {
-    title: "Duplicate Pages",
-    description: "Copy pages within the same PDF",
-    icon: Copy,
-    href: "/duplicate-pages",
-  },
-  {
-    title: "Insert Pages",
-    description: "Add pages from other PDFs",
-    icon: PlusCircle,
-    href: "/insert-pages",
-  },
-  {
-    title: "JPG to PDF",
-    description: "Convert images to PDF",
-    icon: ImagePlus,
-    href: "/jpg-to-pdf",
-    featured: true,
-  },
-  {
-    title: "PDF to JPG",
-    description: "Extract images from PDF",
-    icon: FileImage,
-    href: "/pdf-to-jpg",
-  },
-  {
-    title: "Word to PDF",
-    description: "Convert Word to PDF",
-    icon: FileUp,
-    href: "/word-to-pdf",
-    featured: true,
-  },
-  {
-    title: "PDF to Word",
-    description: "Convert PDF to Word",
-    icon: FileText,
-    href: "/pdf-to-word",
-  },
-  {
-    title: "Excel to PDF",
-    description: "Convert Excel to PDF",
-    icon: TableIcon,
-    href: "/excel-to-pdf",
-  },
-  {
-    title: "PDF to Excel",
-    description: "Convert PDF to Excel",
-    icon: FileDown,
-    href: "/pdf-to-excel",
-  },
-  {
-    title: "PowerPoint to PDF",
-    description: "Convert PPT to PDF",
-    icon: Presentation,
-    href: "/powerpoint-to-pdf",
-  },
-  {
-    title: "PDF to PowerPoint",
-    description: "Convert PDF to PPT",
-    icon: Presentation,
-    href: "/pdf-to-powerpoint",
-  },
-  {
-    title: "HTML to PDF",
-    description: "Convert webpage to PDF",
-    icon: Globe,
-    href: "/html-to-pdf",
-  },
-  {
-    title: "PDF to HTML",
-    description: "Convert PDF to HTML",
-    icon: Globe,
-    href: "/pdf-to-html",
-  },
-  {
-    title: "Text to PDF",
-    description: "Convert text to PDF",
-    icon: FileText,
-    href: "/text-to-pdf",
-  },
-  {
-    title: "PDF to Text",
-    description: "Extract text from PDF",
-    icon: FileText,
-    href: "/pdf-to-text",
-  },
-  {
-    title: "EPUB to PDF",
-    description: "Convert EPUB to PDF",
-    icon: BookOpen,
-    href: "/epub-to-pdf",
-  },
-  {
-    title: "PDF to EPUB",
-    description: "Convert PDF to EPUB",
-    icon: BookOpen,
-    href: "/pdf-to-epub",
-  },
-  {
-    title: "Unlock PDF",
-    description: "Remove PDF passwords",
-    icon: Unlock,
-    href: "/unlock-pdf",
-  },
-  {
-    title: "Protect PDF",
-    description: "Secure with password",
-    icon: Lock,
-    href: "/protect-pdf",
-  },
-  {
-    title: "Organize PDF",
-    description: "Reorder & delete pages",
-    icon: Layers,
-    href: "/organize-pdf",
-  },
-  {
-    title: "Watermark",
-    description: "Add text watermarks",
-    icon: Stamp,
-    href: "/watermark-pdf",
-  },
-  {
-    title: "Sign PDF",
-    description: "Add digital signature",
-    icon: FileSignature,
-    href: "/sign-pdf",
-  },
-  {
-    title: "Edit PDF",
-    description: "Modify PDF content",
-    icon: Type,
-    href: "/edit-pdf",
-  },
-  {
-    title: "OCR PDF",
-    description: "Extract text from scans",
-    icon: ScanLine,
-    href: "/ocr-pdf",
-  },
-  {
-    title: "Repair PDF",
-    description: "Fix corrupted PDF files",
-    icon: Wrench,
-    href: "/repair-pdf",
-  },
-  {
-    title: "Edit Metadata",
-    description: "Edit PDF properties",
-    icon: FileText,
-    href: "/edit-metadata",
-  },
+  // ---- matches iLovePDF order ----
+  { title: "Merge PDF", description: "Combine multiple PDFs into one", icon: Merge, href: "/merge-pdf", category: "organize", iconColor: glass.organize, featured: true },
+  { title: "Split PDF", description: "Separate pages into files", icon: Split, href: "/split-pdf", category: "organize", iconColor: glass.organize, featured: true },
+  { title: "Compress PDF", description: "Reduce file size instantly", icon: Minimize2, href: "/compress-pdf", category: "optimize", iconColor: glass.optimize, featured: true },
+  { title: "PDF to Word", description: "Convert PDF to Word", icon: FileText, href: "/pdf-to-word", category: "convert", iconColor: glass.convert, featured: true },
+  { title: "PDF to PowerPoint", description: "Convert PDF to PPT", icon: Presentation, href: "/pdf-to-powerpoint", category: "convert", iconColor: glass.convert },
+  { title: "PDF to Excel", description: "Convert PDF to Excel", icon: FileDown, href: "/pdf-to-excel", category: "convert", iconColor: glass.convert },
+  { title: "Word to PDF", description: "Convert Word to PDF", icon: FileUp, href: "/word-to-pdf", category: "convert", iconColor: glass.convert, featured: true },
+  { title: "PowerPoint to PDF", description: "Convert PPT to PDF", icon: Presentation, href: "/powerpoint-to-pdf", category: "convert", iconColor: glass.convert },
+  { title: "Excel to PDF", description: "Convert Excel to PDF", icon: TableIcon, href: "/excel-to-pdf", category: "convert", iconColor: glass.convert },
+  { title: "Edit PDF", description: "Modify PDF content", icon: Type, href: "/edit-pdf", category: "edit", iconColor: glass.edit },
+  { title: "PDF to JPG", description: "Extract images from PDF", icon: FileImage, href: "/pdf-to-jpg", category: "convert", iconColor: glass.convert },
+  { title: "JPG to PDF", description: "Convert images to PDF", icon: ImagePlus, href: "/jpg-to-pdf", category: "convert", iconColor: glass.convert, featured: true },
+  { title: "Sign PDF", description: "Add digital signature", icon: FileSignature, href: "/sign-pdf", category: "edit", iconColor: glass.edit },
+  { title: "Watermark", description: "Add text watermarks", icon: Stamp, href: "/watermark-pdf", category: "edit", iconColor: glass.edit },
+  { title: "Rotate PDF", description: "Rotate pages any direction", icon: RotateCw, href: "/rotate-pdf", category: "organize", iconColor: glass.organize },
+  { title: "HTML to PDF", description: "Convert webpage to PDF", icon: Globe, href: "/html-to-pdf", category: "convert", iconColor: glass.convert },
+  { title: "Unlock PDF", description: "Remove PDF passwords", icon: Unlock, href: "/unlock-pdf", category: "security", iconColor: glass.security },
+  { title: "Protect PDF", description: "Secure with password", icon: Lock, href: "/protect-pdf", category: "security", iconColor: glass.security },
+  { title: "Organize PDF", description: "Reorder & delete pages", icon: Layers, href: "/organize-pdf", category: "organize", iconColor: glass.organize },
+  { title: "Repair PDF", description: "Fix corrupted PDF files", icon: Wrench, href: "/repair-pdf", category: "optimize", iconColor: glass.optimize },
+  { title: "OCR PDF", description: "Extract text from scans", icon: ScanLine, href: "/ocr-pdf", category: "intelligence", iconColor: glass.intelligence },
+
+  // ---- PagePuff-only tools (no iLovePDF equivalent) - appended at the end ----
+  { title: "Extract Pages", description: "Extract specific pages from PDF", icon: Scissors, href: "/extract-pages", category: "organize", iconColor: glass.organize },
+  { title: "Delete Pages", description: "Remove unwanted pages from PDF", icon: Trash2, href: "/delete-pages", category: "organize", iconColor: glass.organize },
+  { title: "Reorder Pages", description: "Change page order of PDF", icon: GripVertical, href: "/reorder-pages", category: "organize", iconColor: glass.organize },
+  { title: "Duplicate Pages", description: "Copy pages within the same PDF", icon: Copy, href: "/duplicate-pages", category: "organize", iconColor: glass.organize },
+  { title: "Insert Pages", description: "Add pages from other PDFs", icon: PlusCircle, href: "/insert-pages", category: "organize", iconColor: glass.organize },
+  { title: "PDF to HTML", description: "Convert PDF to HTML", icon: Globe, href: "/pdf-to-html", category: "convert", iconColor: glass.convert },
+  { title: "Text to PDF", description: "Convert text to PDF", icon: FileText, href: "/text-to-pdf", category: "convert", iconColor: glass.convert },
+  { title: "PDF to Text", description: "Extract text from PDF", icon: FileText, href: "/pdf-to-text", category: "convert", iconColor: glass.convert },
+  { title: "EPUB to PDF", description: "Convert EPUB to PDF", icon: BookOpen, href: "/epub-to-pdf", category: "convert", iconColor: glass.convert },
+  { title: "PDF to EPUB", description: "Convert PDF to EPUB", icon: BookOpen, href: "/pdf-to-epub", category: "convert", iconColor: glass.convert },
+  { title: "Edit Metadata", description: "Edit PDF properties", icon: FileText, href: "/edit-metadata", category: "intelligence", iconColor: glass.intelligence },
 ];
 
 export const features = [
