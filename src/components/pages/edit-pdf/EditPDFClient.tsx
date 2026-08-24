@@ -101,6 +101,22 @@ export function EditPDFClient() {
 
   // Refs for interaction
   const workspaceRef = useRef<HTMLDivElement>(null);
+
+  // Re-fit the page to the container width on resize/orientation change so
+  // it never sits wider than the visible viewport.
+  useEffect(() => {
+    const handleResize = () => {
+      const availableWidth = containerRef.current?.clientWidth;
+      const pageWidth = pageDimensions[currentPage]?.width;
+      if (availableWidth && pageWidth) {
+        const fitZoom = (availableWidth - 32) / pageWidth;
+        setZoom((prev) => Math.min(prev, Math.max(0.3, fitZoom)));
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageDimensions, currentPage]);
   const containerRef = useRef<HTMLDivElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const startPos = useRef({ x: 0, y: 0 });
@@ -185,6 +201,18 @@ export function EditPDFClient() {
       setPageImages(images);
       setPageDimensions(dimensions);
       setStatus("editing");
+
+      // Auto-fit the page to the visible width so it doesn't overflow on
+      // mobile - without this, pages rendered at a fixed internal scale
+      // are wider than a phone screen and get clipped/require scrolling.
+      requestAnimationFrame(() => {
+        const availableWidth = containerRef.current?.clientWidth;
+        const pageWidth = dimensions[0]?.width;
+        if (availableWidth && pageWidth) {
+          const fitZoom = (availableWidth - 32) / pageWidth; // 32px breathing room
+          setZoom(Math.min(1, Math.max(0.3, fitZoom)));
+        }
+      });
 
       // Start history
       setHistory([[]]);
