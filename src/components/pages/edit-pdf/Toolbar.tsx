@@ -67,9 +67,9 @@ export function Toolbar({
   ];
 
   return (
-    <div className="relative z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6 shadow-sm">
+    <div className="relative z-30 flex h-14 items-center gap-1 overflow-x-auto border-b border-gray-200 bg-white px-3 shadow-sm sm:h-16 sm:justify-between sm:gap-0 sm:overflow-visible sm:px-6">
       {/* Left: Tools */}
-      <div className="flex items-center gap-2">
+      <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2">
         {tools.map((tool, i) =>
           tool.separator ? (
             <div key={`sep-${i}`} className="mx-2 h-8 w-px bg-gray-200" />
@@ -146,7 +146,7 @@ export function Toolbar({
       </div>
 
       {/* Center: Undo/Redo */}
-      <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-lg bg-gray-100 p-1">
+      <div className="flex flex-shrink-0 items-center gap-1 rounded-lg bg-gray-100 p-1 sm:absolute sm:left-1/2 sm:-translate-x-1/2">
         <button
           onClick={onUndo}
           disabled={!canUndo}
@@ -166,7 +166,7 @@ export function Toolbar({
       </div>
 
       {/* Right: Zoom */}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-shrink-0 items-center gap-2 sm:gap-4">
         <div className="flex items-center rounded-lg bg-gray-100 p-1">
           <button
             onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}
