@@ -22,11 +22,6 @@ const Features = dynamic(
   { ssr: true }
 );
 
-const CTA = dynamic(
-  () => import("@/components/sections/home/CTA").then((mod) => mod.CTA),
-  { ssr: true }
-);
-
 const Testimonials = dynamic(
   () =>
     import("@/components/sections/common/Testimonials").then(
@@ -37,7 +32,7 @@ const Testimonials = dynamic(
 
 export default function Home() {
   // Drives the .scroll-reveal / .stagger-up fade-in animations used across
-  // Hero, ToolsGrid, Features, CTA and Testimonials.
+  // Hero, ToolsGrid, Features and Testimonials.
   useScrollReveal();
 
   return (
@@ -45,7 +40,6 @@ export default function Home() {
       <Hero />
       <ToolsGrid />
       <Features />
-      <CTA />
       <Testimonials />
     </>
   );
