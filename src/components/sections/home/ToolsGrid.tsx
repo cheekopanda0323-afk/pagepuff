@@ -2,16 +2,24 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Search, X } from "lucide-react";
 import { tools, toolCategories } from "@/lib/constants";
 
 export const ToolsGrid = () => {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredTools =
-    activeCategory === "all"
-      ? tools
-      : tools.filter((tool) => tool.category === activeCategory);
+  const query = searchQuery.trim().toLowerCase();
+
+  const filteredTools = tools.filter((tool) => {
+    const matchesCategory =
+      activeCategory === "all" || tool.category === activeCategory;
+    const matchesSearch =
+      !query ||
+      tool.title.toLowerCase().includes(query) ||
+      tool.description.toLowerCase().includes(query);
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <section id="tools" className="relative overflow-hidden py-24 md:py-32">
@@ -28,6 +36,29 @@ export const ToolsGrid = () => {
             Everything you need to work with PDF files, completely free and
             100% private.
           </p>
+        </div>
+
+        {/* Search bar */}
+        <div className="scroll-reveal mx-auto mb-8 max-w-xl">
+          <div className="focus-within:border-primary/50 focus-within:shadow-primary/10 relative flex items-center rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl transition-all duration-300 focus-within:shadow-lg">
+            <Search className="ml-4 h-4.5 w-4.5 flex-shrink-0 text-gray-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search for a tool - e.g. merge, compress, sign..."
+              className="w-full bg-transparent px-3 py-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="mr-3 flex-shrink-0 rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                aria-label="Clear search"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Category Filter - glass pill bar */}
@@ -53,10 +84,10 @@ export const ToolsGrid = () => {
             <Link
               key={tool.href}
               href={tool.href}
-              className="group border-border/70 relative flex min-h-[200px] flex-col overflow-hidden rounded-3xl border bg-white p-6 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:border-white hover:shadow-2xl hover:shadow-black/10"
+              className="group border-border/70 relative flex min-h-[210px] flex-col overflow-hidden rounded-3xl border bg-white p-6 shadow-md transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-white hover:shadow-2xl hover:shadow-black/10"
             >
               <div
-                className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border backdrop-blur-md transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 ${tool.iconColor}`}
+                className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border backdrop-blur-md transition-all duration-500 ease-out group-hover:scale-110 group-hover:-rotate-3 ${tool.iconColor}`}
               >
                 <tool.icon className="h-7 w-7" />
               </div>
@@ -76,7 +107,9 @@ export const ToolsGrid = () => {
 
         {filteredTools.length === 0 && (
           <p className="py-16 text-center text-gray-500">
-            No tools found in this category.
+            {query
+              ? `No tools found for "${searchQuery}".`
+              : "No tools found in this category."}
           </p>
         )}
       </div>
