@@ -10,7 +10,7 @@ export const Hero = () => {
       <div className="relative z-10 mx-auto max-w-5xl text-center">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-white/90 px-3.5 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm sm:mb-5 sm:px-4 sm:text-xs">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          Free • Private • Browser-based
+          Free • No Data Store • Fast Response
         </div>
 
         <h1 className="mb-4 text-[2.55rem] font-extrabold leading-[0.98] tracking-[-0.045em] text-slate-950 sm:text-5xl md:text-6xl lg:text-7xl">
